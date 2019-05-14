@@ -18,10 +18,10 @@ class RESTRealTimeShedulerTask {
     
     @objc var completion:   (()->Void)?
     
-    init(id: String) {
-        self.id = id
-        self.interval = 0.5
-        self.repeats = true
+    init(id: String = "", interval: TimeInterval, repeats: Bool) {
+        self.id         = id
+        self.interval   = interval
+        self.repeats    = repeats
     }
 
 }
