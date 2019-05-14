@@ -23,6 +23,10 @@ class RESTRealTimeShedulerTask {
         self.interval   = interval
         self.repeats    = repeats
     }
+    
+    @objc func invoke() {
+        self.completion?()
+    }
 
 }
 
@@ -41,7 +45,7 @@ class RESTRealTimeShedulerManager {
     public func add(task: RESTRealTimeShedulerTask) {
         let timer = Timer.scheduledTimer(timeInterval: task.interval,
                                          target: task,
-                                         selector: #selector(getter: RESTRealTimeShedulerTask.completion),
+                                         selector: #selector(RESTRealTimeShedulerTask.invoke),
                                          userInfo: nil,
                                          repeats: task.repeats)
         self.timers.append(timer)
