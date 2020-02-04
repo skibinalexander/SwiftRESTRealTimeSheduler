@@ -9,14 +9,12 @@
 import Foundation
 
 class RESTRealTimeShedulerTask {
-    
-    //  MARK: Properties
-    
+    // MARK: - Properties
     var id:         String
     var interval:   TimeInterval
     var repeats:    Bool
     
-    @objc var completion:   (()->Void)?
+    @objc var completion: (() -> Void)?
     
     init(id: String = "", interval: TimeInterval, repeats: Bool) {
         self.id         = id
@@ -31,17 +29,20 @@ class RESTRealTimeShedulerTask {
 }
 
 class RESTRealTimeShedulerManager {
-    
+    // MARK: - Static
     static let shared: RESTRealTimeShedulerManager = RESTRealTimeShedulerManager()
     
+    // MARK: - Private Properties
     private var timers: [Timer]
     private var tasks:  [RESTRealTimeShedulerTask]
     
+    // MARK: - Lifecycle
     init() {
         self.timers = []
         self.tasks  = []
     }
     
+    // MARK: - Public Implementation
     public func add(task: RESTRealTimeShedulerTask) {
         let timer = Timer.scheduledTimer(timeInterval: task.interval,
                                          target: task,
