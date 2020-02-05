@@ -12,14 +12,17 @@ class RESTRealTimeShedulerTask {
     // MARK: - Properties
     var id:         String
     var interval:   TimeInterval
+    var count:      Int?
     var repeats:    Bool
     
     @objc var completion: (() -> Void)?
     
-    init(id: String = "", interval: TimeInterval, repeats: Bool) {
+    init(id: String, interval: TimeInterval, count: Int? = nil, repeats: Bool, completion: (() -> Void)? = nil) {
         self.id         = id
         self.interval   = interval
+        self.count      = count
         self.repeats    = repeats
+        self.completion = completion
     }
     
     @objc func invoke() {
@@ -35,6 +38,11 @@ class RESTRealTimeShedulerManager {
     // MARK: - Private Properties
     private var timers: [Timer]
     private var tasks:  [RESTRealTimeShedulerTask]
+    
+    // MARK: - Public Properties
+    public var taskIds: [String] {
+        return tasks.map({ $0.id })
+    }
     
     // MARK: - Lifecycle
     init() {
@@ -53,11 +61,11 @@ class RESTRealTimeShedulerManager {
         self.tasks.append(task)
     }
     
-    public func remove(task: RESTRealTimeShedulerTask) {
-        if let index = self.tasks.firstIndex(where: { (find) -> Bool in
-            return find.id == task.id
-        }) {
+    public func remove(task id: String) {
+        if let index = self.tasks.firstIndex(where: { $0.id == id }) {
             self.timers[index].invalidate()
+            self.timers.remove(at: index)
+            self.tasks.remove(at: index)
         }
     }
     
